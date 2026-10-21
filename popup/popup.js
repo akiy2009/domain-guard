@@ -1,4 +1,5 @@
 import { LEVELS } from '../lib/analyzer.js';
+import { applyAppearance, DEFAULT_APPEARANCE } from '../lib/theme.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -6,6 +7,11 @@ const SEV_LABEL = { danger: '危険', high: '高', medium: '中', low: '低', in
 
 let current = null;
 let currentSettings = null;
+
+applyAppearance(DEFAULT_APPEARANCE);
+chrome.storage.sync.get(null)
+  .then((stored) => applyAppearance(stored))
+  .catch(() => {});
 
 function esc(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({
@@ -16,23 +22,24 @@ function esc(s) {
 function renderVerdict(result, settings) {
   const card = $('verdict-icon').parentElement;
   const level = result ? result.level : 'safe';
-  const meta = LEVELS[level] || LEVELS.safe;
-  card.className = `verdict ${level}`;
-  $('verdict-icon').textContent = level === 'safe' ? '✓'
-    : level === 'low' ? '!'
-    : level === 'medium' ? '!'
-    : level === 'high' ? '!!'
-    : '!';
+  const cssLevel = LEVELS[level] ? level : 'safe';
+  const meta = LEVELS[cssLevel];
+  card.className = `verdict ${cssLevel}`;
+  $('verdict-icon').textContent = cssLevel === 'safe' ? '✓'
+    : cssLevel === 'low' ? '!'
+    : cssLevel === 'medium' ? '!'
+    : cssLevel === 'high' ? '!!'
+    : '×';
   $('verdict-label').textContent = meta.label;
-  $('verdict-label').style.color = meta.color;
+  $('verdict-label').style.color = `var(--${cssLevel})`;
   $('verdict-host').textContent = result ? (result.displayHost || result.hostname || '') : '';
 
   const score = result ? result.score : 0;
   $('verdict-score').hidden = false;
   $('score-num').textContent = score;
-  $('score-num').style.color = meta.color;
+  $('score-num').style.color = `var(--${cssLevel})`;
   $('meter-fill').style.width = `${Math.max(2, score)}%`;
-  $('meter-fill').style.background = meta.color;
+  $('meter-fill').style.background = `var(--${cssLevel})`;
 
   if (result && result.hostname) {
     $('host-info').hidden = false;
@@ -115,6 +122,7 @@ async function loadFromTab(force = false) {
     if (!resp || !resp.ok) throw new Error(resp ? resp.error : 'no response');
     current = resp.result;
     currentSettings = resp.settings;
+    if (currentSettings) applyAppearance(currentSettings);
     $('empty-state').querySelector('p').textContent = 'このページでは問題は見つかりませんでした。';
     renderVerdict(current, currentSettings);
   } catch (e) {

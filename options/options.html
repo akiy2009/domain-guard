@@ -12,7 +12,7 @@
       <img src="../icons/icon48.png" alt="" width="32" height="32" />
       <div>
         <h1>Domain Guard 設定</h1>
-        <p>偽ドメイン（フィッシング詐欺URL）検知の挙動を設定します。</p>
+        <p>偽ドメイン検知の挙動と見た目を調整します。</p>
       </div>
     </header>
 
@@ -44,6 +44,60 @@
         <span class="row-label">危険なサイトを検知したらデスクトップ通知を表示する</span>
       </label>
     </section>
+
+    <section class="card">
+      <h2>外観</h2>
+      <p class="desc">ポップアップ・警告ページ・設定画面の配色を調整します。</p>
+      <label class="row">
+        <span class="row-label">テーマ</span>
+        <select id="theme">
+          <option value="system">端末の設定に合わせる</option>
+          <option value="light">ライト</option>
+          <option value="dark">ダーク</option>
+        </select>
+      </label>
+      <label class="row">
+        <span class="row-label">アクセントカラー</span>
+        <input type="color" id="accentColor" value="#0969da" />
+        <span id="accentColorLabel" class="color-label">#0969da</span>
+      </label>
+      <label class="row">
+        <span class="row-label">ヘッダー色（ポップアップ）</span>
+        <input type="color" id="headerColor" value="#263238" />
+        <span id="headerColorLabel" class="color-label">#263238</span>
+      </label>
+      <div class="color-grid">
+        <div class="color-row">
+          <span>安全</span>
+          <input type="color" id="c-safe" />
+          <span id="cl-safe" class="color-label"></span>
+        </div>
+        <div class="color-row">
+          <span>ほぼ安全</span>
+          <input type="color" id="c-low" />
+          <span id="cl-low" class="color-label"></span>
+        </div>
+        <div class="color-row">
+          <span>要注意</span>
+          <input type="color" id="c-medium" />
+          <span id="cl-medium" class="color-label"></span>
+        </div>
+        <div class="color-row">
+          <span>危険の可能性大</span>
+          <input type="color" id="c-high" />
+          <span id="cl-high" class="color-label"></span>
+        </div>
+        <div class="color-row">
+          <span>危険</span>
+          <input type="color" id="c-danger" />
+          <span id="cl-danger" class="color-label"></span>
+        </div>
+      </div>
+      <div class="row">
+        <button id="btn-reset-colors" class="btn">配色を初期値に戻す</button>
+      </div>
+    </section>
+
 
     <section class="card">
       <h2>Google Safe Browsing 連携 <span class="badge">任意</span></h2>

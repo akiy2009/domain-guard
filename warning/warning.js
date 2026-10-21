@@ -1,3 +1,10 @@
+import { applyAppearance, DEFAULT_APPEARANCE } from '../lib/theme.js';
+
+applyAppearance(DEFAULT_APPEARANCE);
+chrome.storage.sync.get(null)
+  .then((stored) => applyAppearance(stored))
+  .catch(() => {});
+
 const params = new URLSearchParams(location.search);
 const target = params.get('url') || '';
 const hostParam = params.get('host') || '';
@@ -43,9 +50,6 @@ async function loadFindings() {
 }
 
 function goBack() {
-  if (target) {
-    chrome.runtime.sendMessage({ type: 'BYPASS_BLOCK', url: target });
-  }
   if (history.length > 1) {
     history.back();
   } else {

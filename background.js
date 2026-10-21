@@ -1,4 +1,6 @@
 import { analyzeTabUrl, checkSafeBrowsing, mergeSafeBrowsing, LEVELS } from './lib/analyzer.js';
+import { DEFAULT_APPEARANCE, levelColors } from './lib/theme.js';
+import { getRegisteredDomain } from './lib/utils.js';
 
 const DEFAULT_SETTINGS = {
   enabled: true,
@@ -9,6 +11,7 @@ const DEFAULT_SETTINGS = {
   blockDangerous: true,
   notifyDangerous: true,
   ignoreRules: [],
+  ...DEFAULT_APPEARANCE,
 };
 
 const cache = new Map();
@@ -77,6 +80,7 @@ async function analyzeUrlFull(url, { force = false } = {}) {
 }
 
 function setBadge(tabId, result) {
+  const colors = levelColors(settings);
   const apply = (text, color) => {
     try {
       chrome.action.setBadgeText({ tabId, text }).catch(() => {});
@@ -86,11 +90,11 @@ function setBadge(tabId, result) {
   };
   if (!result || result.level === 'safe') {
     if (result && result.whitelisted) {
-      apply('', LEVELS.safe.color);
+      apply('', colors.safe);
       return;
     }
     if (settings.enabled && result) {
-      apply('OK', LEVELS.safe.color);
+      apply('OK', colors.safe);
     } else {
       apply('', '#666666');
     }
@@ -100,7 +104,7 @@ function setBadge(tabId, result) {
     : result.level === 'medium' ? '!!'
     : result.level === 'high' ? '!!!'
     : '危';
-  apply(mark, LEVELS[result.level].color);
+  apply(mark, colors[result.level] || LEVELS[result.level].color);
 }
 
 async function updateTabBadge(tabId, url, { force = false } = {}) {
@@ -162,31 +166,55 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   notifiedTabs.delete(tabId);
 });
 
-const bypasses = new Map();
+const BYPASS_KEY = 'bypasses';
+const BYPASS_TTL = 2 * 60 * 1000;
 
-function addBypass(url, ttlMs = 15000) {
+function bypassKey(url) {
   try {
-    const u = new URL(url);
-    const key = `${u.protocol}//${u.hostname}${u.port ? ':' + u.port : ''}`;
-    bypasses.set(key, Date.now() + ttlMs);
+    const host = new URL(url).hostname.toLowerCase();
+    return getRegisteredDomain(host);
+  } catch {
+    return '';
+  }
+}
+
+async function readBypasses() {
+  try {
+    const stored = await chrome.storage.session.get(BYPASS_KEY);
+    return stored[BYPASS_KEY] && typeof stored[BYPASS_KEY] === 'object' ? stored[BYPASS_KEY] : {};
+  } catch {
+    return {};
+  }
+}
+
+async function addBypass(url, ttlMs = BYPASS_TTL) {
+  const key = bypassKey(url);
+  if (!key) return;
+  const map = await readBypasses();
+  const now = Date.now();
+  for (const [k, exp] of Object.entries(map)) {
+    if (!exp || exp < now) delete map[k];
+  }
+  map[key] = now + ttlMs;
+  try {
+    await chrome.storage.session.set({ [BYPASS_KEY]: map });
   } catch { /* noop */ }
 }
 
-function isBypassed(url) {
-  try {
-    const u = new URL(url);
-    const key = `${u.protocol}//${u.hostname}${u.port ? ':' + u.port : ''}`;
-    const exp = bypasses.get(key);
-    if (!exp) return false;
-    if (Date.now() > exp) {
-      bypasses.delete(key);
-      return false;
-    }
-    bypasses.delete(key);
-    return true;
-  } catch {
+async function isBypassed(url) {
+  const key = bypassKey(url);
+  if (!key) return false;
+  const map = await readBypasses();
+  const exp = map[key];
+  if (!exp) return false;
+  if (Date.now() > exp) {
+    delete map[key];
+    try {
+      await chrome.storage.session.set({ [BYPASS_KEY]: map });
+    } catch { /* noop */ }
     return false;
   }
+  return true;
 }
 
 chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
@@ -194,7 +222,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   if (!/^https?:/i.test(details.url)) return;
   if (!settings.enabled || !settings.blockDangerous) return;
   if (details.url.includes('/warning/warning.html')) return;
-  if (isBypassed(details.url)) return;
+  if (await isBypassed(details.url)) return;
   try {
     const result = await analyzeUrlFull(details.url);
     if (result && result.level === 'danger') {
