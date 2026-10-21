@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Domain Guard</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <img src="../icons/icon32.png" alt="" width="20" height="20" />
+      <span>Domain Guard</span>
+    </div>
+    <button id="btn-settings" class="icon-btn" title="設定">⚙</button>
+  </header>
+
+  <main>
+    <section id="card-verdict" class="verdict">
+      <div id="verdict-icon" class="verdict-icon">…</div>
+      <div class="verdict-text">
+        <div id="verdict-label" class="verdict-label">解析中…</div>
+        <div id="verdict-host" class="verdict-host"></div>
+      </div>
+      <div id="verdict-score" class="verdict-score" hidden>
+        <span id="score-num">0</span>
+        <span class="score-unit">/100</span>
+      </div>
+    </section>
+
+    <div class="meter"><div id="meter-fill" class="meter-fill"></div></div>
+
+    <section id="host-info" class="host-info" hidden>
+      <div class="host-row"><span class="host-key">表示ドメイン</span><span id="host-display" class="host-val mono"></span></div>
+      <div class="host-row"><span class="host-key">登録ドメイン</span><span id="host-registered" class="host-val mono"></span></div>
+      <div id="host-puny-row" class="host-row" hidden><span class="host-key">実体</span><span id="host-actual" class="host-val mono warn-text"></span></div>
+    </section>
+
+    <section id="findings-wrap" class="findings-wrap" hidden>
+      <h2>検出結果 <span id="findings-count" class="count-badge"></span></h2>
+      <ul id="findings" class="findings"></ul>
+    </section>
+
+    <section id="empty-state" class="empty">
+      <p>このページでは問題は見つかりませんでした。</p>
+    </section>
+
+    <section id="notice" class="notice" hidden></section>
+
+    <div class="actions">
+      <button id="btn-whitelist" class="btn btn-ghost" hidden>✓ このドメインを信頼済みに追加</button>
+      <button id="btn-recheck" class="btn btn-secondary">再解析</button>
+    </div>
+
+    <p class="disclaimer">判定結果は目安です。最終的な判断はご自身で行ってください。</p>
+  </main>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

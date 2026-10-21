@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Domain Guard - Fake Domain Detector",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Real-time phishing/fake domain detection: typosquatting, homograph (IDN) attacks, impersonating subdomains, risky TLDs, and optional Google Safe Browsing integration.",
+    "description": "Extension description"
+  }
+}

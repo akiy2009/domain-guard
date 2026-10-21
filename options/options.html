@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Domain Guard - 設定</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="../icons/icon48.png" alt="" width="32" height="32" />
+      <div>
+        <h1>Domain Guard 設定</h1>
+        <p>偽ドメイン（フィッシング詐欺URL）検知の挙動を設定します。</p>
+      </div>
+    </header>
+
+    <div id="save-toast" class="toast" hidden>✓ 自動保存しました</div>
+
+    <section class="card">
+      <h2>基本</h2>
+      <label class="row switch-row">
+        <input type="checkbox" id="enabled" />
+        <span class="switch"></span>
+        <span class="row-label">検知機能を有効にする</span>
+      </label>
+      <label class="row">
+        <span class="row-label">検知の感度</span>
+        <select id="sensitivity">
+          <option value="loose">緩い（誤検知を減らす）</option>
+          <option value="normal">標準</option>
+          <option value="strict">厳しい（疑わしいサイトを広く警告）</option>
+        </select>
+      </label>
+      <label class="row switch-row">
+        <input type="checkbox" id="blockDangerous" />
+        <span class="switch"></span>
+        <span class="row-label">「危険」と判定したサイトへのアクセスを警告ページでブロックする</span>
+      </label>
+      <label class="row switch-row">
+        <input type="checkbox" id="notifyDangerous" />
+        <span class="switch"></span>
+        <span class="row-label">危険なサイトを検知したらデスクトップ通知を表示する</span>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>Google Safe Browsing 連携 <span class="badge">任意</span></h2>
+      <p class="desc">
+        Google が運営する「セーフブラウジング」のデータベースと照合し、既知のフィッシング・マルウェアサイトを検出します。
+        APIキーは <a href="https://console.cloud.google.com/google-cloud-apis" target="_blank" rel="noopener">Google Cloud Console</a> で
+        「Safe Browsing API」を有効にすると取得できます（無料枠あり）。
+      </p>
+      <label class="row switch-row">
+        <input type="checkbox" id="enableSafeBrowsing" />
+        <span class="switch"></span>
+        <span class="row-label">Safe Browsing API と照合する</span>
+      </label>
+      <label class="row">
+        <span class="row-label">API キー</span>
+        <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off" spellcheck="false" />
+      </label>
+      <div class="row">
+        <button id="btn-test-api" class="btn">APIキーをテスト</button>
+        <span id="api-test-result" class="test-result"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>ホワイトリスト（信頼するドメイン）</h2>
+      <p class="desc">ここに登録したドメインとそのサブドメインは、常に「安全」として扱われ警告を表示しません。</p>
+      <div class="row add-row">
+        <input type="text" id="wl-input" placeholder="例: example.co.jp" spellcheck="false" />
+        <button id="btn-wl-add" class="btn btn-primary">追加</button>
+      </div>
+      <ul id="wl-list" class="wl-list"></ul>
+      <p id="wl-empty" class="desc">（登録されているドメインはありません）</p>
+    </section>
+
+    <section class="card">
+      <h2>検知ルール一覧</h2>
+      <p class="desc">Domain Guard が見ている主なパターンです。複数のルールに当てはまるほどスコアが上がり、危険度が高くなります。</p>
+      <ul id="rule-list" class="rule-list"></ul>
+    </section>
+
+    <footer>
+      <p>Domain Guard v1.0.0 — 判定はヒューリスティック解析による参考情報です。個人情報・パスワードの入力前は必ずURLをご確認ください。</p>
+    </footer>
+  </div>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

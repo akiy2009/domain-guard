@@ -1,0 +1,184 @@
+:root {
+  --bg: #f6f8fa;
+  --card: #ffffff;
+  --text: #1f2328;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --safe: #1a7f37;
+  --danger: #a40e26;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+h1 { font-size: 20px; }
+header p { color: var(--muted); font-size: 13px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.card h2 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  background: #ddf4ff;
+  color: var(--accent);
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.desc { color: var(--muted); font-size: 12.5px; margin-bottom: 10px; }
+.desc a { color: var(--accent); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  flex-wrap: wrap;
+}
+.row-label { min-width: 220px; flex: 1; font-size: 13.5px; }
+
+input[type="text"],
+input[type="password"],
+select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fff;
+  min-width: 260px;
+  flex: 1;
+}
+input:focus, select:focus { outline: 2px solid #0969da55; border-color: var(--accent); }
+
+.switch-row { cursor: pointer; user-select: none; }
+.switch-row input { display: none; }
+.switch {
+  width: 40px;
+  height: 22px;
+  background: #cdd5dd;
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.switch-row input:checked + .switch { background: var(--safe); }
+.switch-row input:checked + .switch::after { transform: translateX(18px); }
+
+.btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f6f8fa;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.btn:hover { background: #eef1f4; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: #0757b3; }
+.btn-danger-link {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.btn-danger-link:hover { background: #ffebe9; }
+
+.add-row { margin-bottom: 8px; }
+
+.wl-list { list-style: none; }
+.wl-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12.5px;
+  background: #fbfcfd;
+}
+
+.test-result { font-size: 12.5px; }
+.test-result.ok { color: var(--safe); }
+.test-result.err { color: var(--danger); }
+
+.rule-list { list-style: none; }
+.rule-list li {
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 12.5px;
+}
+.rule-list li:last-child { border-bottom: none; }
+.rule-title { font-weight: 700; }
+.rule-desc { color: var(--muted); }
+
+.toast {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  background: var(--safe);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+footer { color: var(--muted); font-size: 11.5px; text-align: center; margin-top: 24px; }

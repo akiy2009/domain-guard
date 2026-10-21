@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>安全ではない可能性があります - Domain Guard</title>
+  <link rel="stylesheet" href="warning.css" />
+</head>
+<body>
+  <main class="page">
+    <div class="bar"></div>
+
+    <h1>このサイトは安全ではない可能性があります</h1>
+    <p class="lead">開こうとしているページが、偽サイトによく見られる特徴に当てはまりました。個人情報を入力する前に、内容を確認してください。</p>
+
+    <section class="target">
+      <div class="label">開こうとしているページ</div>
+      <div id="target-url" class="url"></div>
+      <div class="meta">
+        <span id="host" class="host"></span>
+        <span id="score" class="score"></span>
+      </div>
+    </section>
+
+    <section id="reasons-wrap" class="section">
+      <h2>検出された特徴</h2>
+      <ul id="reasons" class="reasons"></ul>
+    </section>
+
+    <section class="section tips">
+      <h2>確認してください</h2>
+      <ul>
+        <li>パスワード、カード番号、暗証番号、マイナンバーは入力しないでください。</li>
+        <li>心当たりのないメールやSMSのリンクだった場合は、開かずに削除してください。</li>
+        <li>銀行や役所などの公式サイトへは、検索結果やブックマークから直接アクセスしてください。</li>
+      </ul>
+    </section>
+
+    <div class="actions">
+      <button id="btn-back" class="btn primary">前のページに戻る</button>
+      <button id="btn-proceed" class="btn text">危険を承知で開く</button>
+    </div>
+
+    <p class="foot">Domain Guard による警告です。内容を確認したうえで判断してください。</p>
+  </main>
+  <script type="module" src="warning.js"></script>
+</body>
+</html>
