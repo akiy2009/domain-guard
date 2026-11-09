@@ -1,0 +1,61 @@
+name: Bug report
+description: 不具合を報告する
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ご報告ありがとうございます。セキュリティ上の問題は公開 Issue に書かず、
+        [SECURITY.md](https://github.com/akiy2009/domain-guard/blob/main/SECURITY.md) の手順でご連絡ください。
+  - type: input
+    id: version
+    attributes:
+      label: Domain Guard のバージョン
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: chrome
+    attributes:
+      label: Chrome のバージョン / OS
+      placeholder: "Chrome 131.0.6778.86 / Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: 操作手順を順番に記載してください。
+      placeholder: |
+        1. chrome://extensions から読み込む
+        2. 設定で「厳しい」を選ぶ
+        3. https://example.com を開く
+        4. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する動作
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の動作
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: コンソール / Service Worker のログ（あれば）
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 確認事項
+      options:
+        - label: 最新の main ブランチでも再現する
+        - label: 既存の Issue を検索した
+          required: true

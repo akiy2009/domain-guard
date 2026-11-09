@@ -3,26 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
   <title>安全ではない可能性があります - Domain Guard</title>
   <link rel="stylesheet" href="warning.css" />
 </head>
 <body>
   <main class="page">
-    <div class="bar"></div>
+    <div class="bar" aria-hidden="true"></div>
 
+    <div class="alert-icon" aria-hidden="true">!</div>
     <h1>このサイトは安全ではない可能性があります</h1>
-    <p class="lead">開こうとしているページが、偽サイトによく見られる特徴に当てはまりました。個人情報を入力する前に、内容を確認してください。</p>
+    <p class="lead">
+      開こうとしているページが、偽サイトによく見られる特徴に当てはまりました。
+      個人情報を入力する前に、内容を確認してください。
+    </p>
 
-    <section class="target">
+    <section class="target" aria-label="開こうとしているページ">
       <div class="label">開こうとしているページ</div>
       <div id="target-url" class="url"></div>
       <div class="meta">
         <span id="host" class="host"></span>
         <span id="score" class="score"></span>
       </div>
+      <div id="target-extra" class="target-extra" hidden></div>
+      <div class="target-actions">
+        <button id="btn-copy" class="link-btn" type="button">URLをコピー</button>
+        <a id="report-link" class="link-btn" href="https://safebrowsing.google.com/safebrowsing/report_phish/"
+           target="_blank" rel="noopener noreferrer">Google に報告</a>
+        <span id="copy-status" class="copy-status" role="status"></span>
+      </div>
     </section>
 
-    <section id="reasons-wrap" class="section">
+    <section id="reasons-wrap" class="section" hidden>
       <h2>検出された特徴</h2>
       <ul id="reasons" class="reasons"></ul>
     </section>
@@ -33,15 +45,18 @@
         <li>パスワード、カード番号、暗証番号、マイナンバーは入力しないでください。</li>
         <li>心当たりのないメールやSMSのリンクだった場合は、開かずに削除してください。</li>
         <li>銀行や役所などの公式サイトへは、検索結果やブックマークから直接アクセスしてください。</li>
+        <li>この警告は、URLの特徴から自動判定したものです。正規サイトが警告されることもあります。</li>
       </ul>
     </section>
 
     <div class="actions">
-      <button id="btn-back" class="btn primary">前のページに戻る</button>
-      <button id="btn-proceed" class="btn text">危険を承知で開く</button>
+      <button id="btn-back" class="btn primary" type="button">前のページに戻る</button>
+      <button id="btn-proceed" class="btn text" type="button">危険を承知で開く</button>
     </div>
 
-    <p class="foot">Domain Guard による警告です。内容を確認したうえで判断してください。</p>
+    <p class="foot">
+      Domain Guard による警告です。内容を確認したうえで判断してください。
+    </p>
   </main>
   <script type="module" src="warning.js"></script>
 </body>

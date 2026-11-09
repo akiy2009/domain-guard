@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
   <title>Domain Guard - 設定</title>
   <link rel="stylesheet" href="options.css" />
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <img src="../icons/icon48.png" alt="" width="32" height="32" />
+    <header class="page-header">
+      <img src="../icons/icon48.png" alt="" width="36" height="36" />
       <div>
-        <h1>Domain Guard 設定</h1>
-        <p>偽ドメイン検知の挙動と見た目を調整します。</p>
+        <div class="title-row">
+          <h1>Domain Guard 設定</h1>
+          <span id="version" class="version">v1.1.0</span>
+        </div>
+        <p>偽ドメイン検知の挙動と見た目を調整します。変更は自動保存されます。</p>
       </div>
     </header>
 
-    <div id="save-toast" class="toast" hidden>✓ 自動保存しました</div>
+    <div id="save-toast" class="toast" role="status" hidden>✓ 自動保存しました</div>
 
     <section class="card">
       <h2>基本</h2>
       <label class="row switch-row">
         <input type="checkbox" id="enabled" />
-        <span class="switch"></span>
+        <span class="switch" aria-hidden="true"></span>
         <span class="row-label">検知機能を有効にする</span>
       </label>
       <label class="row">
@@ -35,14 +39,33 @@
       </label>
       <label class="row switch-row">
         <input type="checkbox" id="blockDangerous" />
-        <span class="switch"></span>
+        <span class="switch" aria-hidden="true"></span>
         <span class="row-label">「危険」と判定したサイトへのアクセスを警告ページでブロックする</span>
       </label>
       <label class="row switch-row">
         <input type="checkbox" id="notifyDangerous" />
-        <span class="switch"></span>
+        <span class="switch" aria-hidden="true"></span>
         <span class="row-label">危険なサイトを検知したらデスクトップ通知を表示する</span>
       </label>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>検知ルール</h2>
+        <button id="btn-rule-reset" class="btn btn-small" type="button">すべて有効に戻す</button>
+      </div>
+      <p class="desc">オフにしたルールは判定スコアに加算されません。誤検知が多いと感じたルールだけを無効にできます。</p>
+      <ul id="rule-list" class="rule-list"></ul>
+    </section>
+
+    <section class="card">
+      <h2>URL をチェック</h2>
+      <p class="desc">保存されている設定で任意のURLを判定できます。実際にはアクセスしません。</p>
+      <div class="row add-row">
+        <input type="text" id="test-url" placeholder="例: https://paypal.com.evil-example.com/" spellcheck="false" />
+        <button id="btn-test-url" class="btn btn-primary" type="button">判定</button>
+      </div>
+      <div id="test-result" class="test-result-box" hidden></div>
     </section>
 
     <section class="card">
@@ -94,21 +117,20 @@
         </div>
       </div>
       <div class="row">
-        <button id="btn-reset-colors" class="btn">配色を初期値に戻す</button>
+        <button id="btn-reset-colors" class="btn" type="button">配色を初期値に戻す</button>
       </div>
     </section>
-
 
     <section class="card">
       <h2>Google Safe Browsing 連携 <span class="badge">任意</span></h2>
       <p class="desc">
-        Google が運営する「セーフブラウジング」のデータベースと照合し、既知のフィッシング・マルウェアサイトを検出します。
-        APIキーは <a href="https://console.cloud.google.com/google-cloud-apis" target="_blank" rel="noopener">Google Cloud Console</a> で
-        「Safe Browsing API」を有効にすると取得できます（無料枠あり）。
+        Google のセーフブラウジングデータベースと照合し、既知のフィッシング・マルウェアサイトを検出します。
+        APIキーは <a href="https://console.cloud.google.com/apis/library/safebrowsing.googleapis.com" target="_blank" rel="noopener noreferrer">Google Cloud Console</a>
+        で「Safe Browsing API」を有効にすると取得できます（無料枠あり）。
       </p>
       <label class="row switch-row">
         <input type="checkbox" id="enableSafeBrowsing" />
-        <span class="switch"></span>
+        <span class="switch" aria-hidden="true"></span>
         <span class="row-label">Safe Browsing API と照合する</span>
       </label>
       <label class="row">
@@ -116,30 +138,43 @@
         <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off" spellcheck="false" />
       </label>
       <div class="row">
-        <button id="btn-test-api" class="btn">APIキーをテスト</button>
-        <span id="api-test-result" class="test-result"></span>
+        <button id="btn-test-api" class="btn" type="button">APIキーをテスト</button>
+        <span id="api-test-result" class="test-result" role="status"></span>
       </div>
+      <p class="desc small">
+        照合を有効にすると、閲覧中のURLが Google に送信されます。ローカルネットワークや localhost は送信しません。
+      </p>
     </section>
 
     <section class="card">
       <h2>ホワイトリスト（信頼するドメイン）</h2>
-      <p class="desc">ここに登録したドメインとそのサブドメインは、常に「安全」として扱われ警告を表示しません。</p>
+      <p class="desc">登録したドメインとそのサブドメインは常に「安全」として扱われ、警告を表示しません。登録は慎重に行ってください。</p>
       <div class="row add-row">
         <input type="text" id="wl-input" placeholder="例: example.co.jp" spellcheck="false" />
-        <button id="btn-wl-add" class="btn btn-primary">追加</button>
+        <button id="btn-wl-add" class="btn btn-primary" type="button">追加</button>
       </div>
+      <p id="wl-error" class="inline-error" role="alert" hidden></p>
       <ul id="wl-list" class="wl-list"></ul>
       <p id="wl-empty" class="desc">（登録されているドメインはありません）</p>
     </section>
 
     <section class="card">
-      <h2>検知ルール一覧</h2>
-      <p class="desc">Domain Guard が見ている主なパターンです。複数のルールに当てはまるほどスコアが上がり、危険度が高くなります。</p>
-      <ul id="rule-list" class="rule-list"></ul>
+      <h2>データ管理</h2>
+      <p class="desc">設定のバックアップ・復元・初期化を行います。APIキーはエクスポートに含まれません。</p>
+      <div class="row button-row">
+        <button id="btn-export" class="btn" type="button">設定をエクスポート</button>
+        <label class="btn file-btn">
+          設定をインポート
+          <input type="file" id="import-file" accept="application/json,.json" />
+        </label>
+        <button id="btn-reset-all" class="btn btn-danger" type="button">すべて初期化</button>
+      </div>
+      <p id="data-message" class="test-result" role="status"></p>
     </section>
 
     <footer>
-      <p>Domain Guard v1.0.0 — 判定はヒューリスティック解析による参考情報です。個人情報・パスワードの入力前は必ずURLをご確認ください。</p>
+      <p>Domain Guard <span class="footer-version"></span> — 判定はヒューリスティック解析による参考情報です。個人情報・パスワードの入力前は必ずURLをご確認ください。</p>
+      <p><a href="https://github.com/akiy2009/domain-guard" target="_blank" rel="noopener noreferrer">GitHub</a> ・ MIT License</p>
     </footer>
   </div>
   <script type="module" src="options.js"></script>

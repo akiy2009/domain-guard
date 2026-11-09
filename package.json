@@ -1,0 +1,20 @@
+{
+  "name": "domain-guard",
+  "version": "1.1.0",
+  "description": "フィッシング詐欺で使われる偽ドメインをリアルタイムに検知する Chrome 拡張機能",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "lint:syntax": "node tools/check-syntax.mjs",
+    "check": "npm run lint:syntax && npm test",
+    "build": "node tools/build.mjs",
+    "psl": "node tools/update-psl.mjs",
+    "psl:check": "node tools/update-psl.mjs --check",
+    "icons": "python tools/generate_icons.py"
+  }
+}

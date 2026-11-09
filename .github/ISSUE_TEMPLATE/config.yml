@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: セキュリティ上の問題
+    url: https://github.com/akiy2009/domain-guard/security/policy
+    about: 脆弱性は公開 Issue ではなく SECURITY.md の手順でご連絡ください。
+  - name: 使い方・質問
+    url: https://github.com/akiy2009/domain-guard/discussions
+    about: 設定方法や使い方の質問は Discussions へ。
