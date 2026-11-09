@@ -44,9 +44,10 @@ test('package.json は依存パッケージを持たない', () => {
   assert.equal(pkg.type, 'module');
   assert.equal(pkg.dependencies, undefined);
   assert.equal(pkg.devDependencies, undefined);
-  assert.match(pkg.scripts.test, /node --test/);
+  assert.match(pkg.scripts.test, /tools\/test\.mjs/);
   assert.ok(pkg.scripts.check);
   assert.ok(pkg.scripts.build);
+  assert.ok(exists('tools/test.mjs'));
 });
 
 test('manifest が参照するファイルが存在する', () => {

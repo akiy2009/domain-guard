@@ -9,7 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test \"test/*.test.mjs\"",
+    "test": "node tools/test.mjs",
     "lint:syntax": "node tools/check-syntax.mjs",
     "check": "npm run lint:syntax && npm test",
     "build": "node tools/build.mjs",
