@@ -4,7 +4,7 @@ import test from 'node:test';
 import {
   DEFAULT_SETTINGS, MAX_WHITELIST, SENSITIVITY_VALUES, isWhitelisted,
   loadSettings, normalizeDomainInput, normalizeIgnoreRules, normalizeSettings,
-  normalizeWhitelist, publicSettings, saveSettings,
+  normalizeWhitelist, publicSettings, saveSettings, storageArea,
 } from '../lib/settings.js';
 import { DEFAULT_APPEARANCE } from '../lib/theme.js';
 import { TOGGLEABLE_RULE_IDS } from '../lib/rules.js';
@@ -131,16 +131,12 @@ test('設定の保存先はブラウザプロファイル単位の storage.local
   const local = { async get() { return {}; }, async set() {} };
   globalThis.chrome = { storage: { local, sync: {} } };
   try {
-    assert.equal((awaitableStorageArea()), local);
+    assert.equal(storageArea(), local);
   } finally {
     if (previous === undefined) delete globalThis.chrome;
     else globalThis.chrome = previous;
   }
 });
-
-function awaitableStorageArea() {
-  return globalThis.chrome.storage.local;
-}
 
 test('旧 storage.sync の設定を local へ初回移行する', async () => {
   const previous = globalThis.chrome;
