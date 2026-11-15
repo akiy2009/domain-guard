@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" content="light" />
   <title>Domain Guard - 設定</title>
   <link rel="stylesheet" href="options.css" />
 </head>
@@ -16,14 +16,21 @@
           <h1>Domain Guard 設定</h1>
           <span id="version" class="version">v1.1.0</span>
         </div>
-        <p>偽ドメイン検知の挙動と見た目を調整します。変更は自動保存されます。</p>
+        <p>検知ポリシー、例外ドメイン、外観を一元管理します。変更はこのブラウザプロファイルに自動保存されます。</p>
       </div>
     </header>
 
+    <div class="dashboard-meta"><span class="status-dot"></span><span>ローカル保存</span><span class="meta-separator">/</span><span>このブラウザプロファイルのみ</span></div>
+
+    <nav class="dashboard-nav" aria-label="設定セクション">
+      <a href="#general">基本設定</a><a href="#rules">検知ルール</a><a href="#url-check">URLチェッカー</a><a href="#appearance">外観</a><a href="#safe-browsing">外部照合</a><a href="#allowlist">許可リスト</a><a href="#data">データ管理</a>
+    </nav>
+
     <div id="save-toast" class="toast" role="status" hidden>✓ 自動保存しました</div>
 
-    <section class="card">
-      <h2>基本</h2>
+    <section class="card" id="general">
+      <div class="card-kicker">PROTECTION</div>
+      <h2>基本設定</h2>
       <label class="row switch-row">
         <input type="checkbox" id="enabled" />
         <span class="switch" aria-hidden="true"></span>
@@ -49,7 +56,8 @@
       </label>
     </section>
 
-    <section class="card">
+    <section class="card" id="rules">
+      <div class="card-kicker">DETECTION POLICY</div>
       <div class="section-head">
         <h2>検知ルール</h2>
         <button id="btn-rule-reset" class="btn btn-small" type="button">すべて有効に戻す</button>
@@ -58,8 +66,9 @@
       <ul id="rule-list" class="rule-list"></ul>
     </section>
 
-    <section class="card">
-      <h2>URL をチェック</h2>
+    <section class="card" id="url-check">
+      <div class="card-kicker">QUICK ANALYSIS</div>
+      <h2>URL チェッカー</h2>
       <p class="desc">保存されている設定で任意のURLを判定できます。実際にはアクセスしません。</p>
       <div class="row add-row">
         <input type="text" id="test-url" placeholder="例: https://paypal.com.evil-example.com/" spellcheck="false" />
@@ -68,7 +77,8 @@
       <div id="test-result" class="test-result-box" hidden></div>
     </section>
 
-    <section class="card">
+    <section class="card" id="appearance">
+      <div class="card-kicker">INTERFACE</div>
       <h2>外観</h2>
       <p class="desc">ポップアップ・警告ページ・設定画面の配色を調整します。</p>
       <label class="row">
@@ -121,7 +131,8 @@
       </div>
     </section>
 
-    <section class="card">
+    <section class="card" id="safe-browsing">
+      <div class="card-kicker">THREAT INTELLIGENCE</div>
       <h2>Google Safe Browsing 連携 <span class="badge">任意</span></h2>
       <p class="desc">
         Google のセーフブラウジングデータベースと照合し、既知のフィッシング・マルウェアサイトを検出します。
@@ -146,8 +157,9 @@
       </p>
     </section>
 
-    <section class="card">
-      <h2>ホワイトリスト（信頼するドメイン）</h2>
+    <section class="card" id="allowlist">
+      <div class="card-kicker">TRUST MANAGEMENT</div>
+      <h2>許可リスト（信頼するドメイン）</h2>
       <p class="desc">登録したドメインとそのサブドメインは常に「安全」として扱われ、警告を表示しません。登録は慎重に行ってください。</p>
       <div class="row add-row">
         <input type="text" id="wl-input" placeholder="例: example.co.jp" spellcheck="false" />
@@ -158,9 +170,10 @@
       <p id="wl-empty" class="desc">（登録されているドメインはありません）</p>
     </section>
 
-    <section class="card">
+    <section class="card" id="data">
+      <div class="card-kicker">DATA & BACKUP</div>
       <h2>データ管理</h2>
-      <p class="desc">設定のバックアップ・復元・初期化を行います。APIキーはエクスポートに含まれません。</p>
+      <p class="desc">設定のバックアップ・復元・初期化を行います。APIキーはエクスポートに含まれません。設定はこのブラウザプロファイル内に保存され、他のブラウザとは共有されません。</p>
       <div class="row button-row">
         <button id="btn-export" class="btn" type="button">設定をエクスポート</button>
         <label class="btn file-btn">

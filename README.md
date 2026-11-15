@@ -129,7 +129,7 @@
 - 開発者のサーバーは存在せず、解析結果を外部へ送信しません。
 - ページ本文を読むコンテンツスクリプトは使用しません。
 - Safe Browsing を有効にした場合のみ、対象 URL を Google に送信します。
-- 設定は `chrome.storage.sync`、警告情報と一時バイパスは `chrome.storage.session` に保存します。
+- 設定は `chrome.storage.local` に保存され、ブラウザプロファイルごとに独立します。旧版の `chrome.storage.sync` 設定は初回起動時にローカルへ移行します。警告情報と一時バイパスは `chrome.storage.session` に保存します。
 
 権限の詳細は [docs/permissions.md](docs/permissions.md)、プライバシーポリシーは [PRIVACY.md](PRIVACY.md) を参照してください。
 
