@@ -47,7 +47,7 @@ async function getSettings() {
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area !== 'sync') return;
+  if (area !== 'local') return;
   settings = applySettingsChanges(settings, changes);
   cache.clear();
   refreshAllBadges();
@@ -527,7 +527,6 @@ chrome.runtime.onInstalled.addListener((details) => {
   (async () => {
     const current = await loadSettings();
     settings = current;
-    await chrome.storage.sync.set(normalizeSettings(current));
     if (details.reason === 'install' || details.reason === 'update') {
       await refreshAllBadges();
     }
