@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" content="light" />
   <title>Domain Guard - 設定</title>
   <link rel="stylesheet" href="options.css" />
 </head>
@@ -16,9 +16,15 @@
           <h1>Domain Guard 設定</h1>
           <span id="version" class="version">v1.1.0</span>
         </div>
-        <p>偽ドメイン検知の挙動と見た目を調整します。変更は自動保存されます。</p>
+        <p>検知ポリシー、例外ドメイン、外観を一元管理します。変更はこのブラウザプロファイルに自動保存されます。</p>
       </div>
     </header>
+
+    <div class="dashboard-meta"><span class="status-dot"></span><span>ローカル保存</span><span class="meta-separator">/</span><span>このブラウザプロファイルのみ</span></div>
+
+    <nav class="dashboard-nav" aria-label="設定セクション">
+      <a href="#general">基本設定</a><a href="#rules">検知ルール</a><a href="#url-check">URLチェッカー</a><a href="#appearance">外観</a><a href="#safe-browsing">外部照合</a><a href="#allowlist">許可リスト</a><a href="#data">データ管理</a>
+    </nav>
 
     <div id="save-toast" class="toast" role="status" hidden>✓ 自動保存しました</div>
 
@@ -160,7 +166,7 @@
 
     <section class="card">
       <h2>データ管理</h2>
-      <p class="desc">設定のバックアップ・復元・初期化を行います。APIキーはエクスポートに含まれません。</p>
+      <p class="desc">設定のバックアップ・復元・初期化を行います。APIキーはエクスポートに含まれません。設定はこのブラウザプロファイル内に保存され、他のブラウザとは共有されません。</p>
       <div class="row button-row">
         <button id="btn-export" class="btn" type="button">設定をエクスポート</button>
         <label class="btn file-btn">
