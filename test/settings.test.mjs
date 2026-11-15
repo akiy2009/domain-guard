@@ -124,3 +124,46 @@ test('storage がない環境でも既定値を返す', async () => {
   const settings = await loadSettings(null);
   assert.equal(settings.enabled, true);
 });
+
+
+test('設定の保存先はブラウザプロファイル単位の storage.local', () => {
+  const previous = globalThis.chrome;
+  const local = { async get() { return {}; }, async set() {} };
+  globalThis.chrome = { storage: { local, sync: {} } };
+  try {
+    assert.equal((awaitableStorageArea()), local);
+  } finally {
+    if (previous === undefined) delete globalThis.chrome;
+    else globalThis.chrome = previous;
+  }
+});
+
+function awaitableStorageArea() {
+  return globalThis.chrome.storage.local;
+}
+
+test('旧 storage.sync の設定を local へ初回移行する', async () => {
+  const previous = globalThis.chrome;
+  const localStore = {};
+  const syncStore = { sensitivity: 'strict', whitelist: ['example.com'] };
+  const local = {
+    async get() { return { ...localStore }; },
+    async set(values) { Object.assign(localStore, values); },
+  };
+  const sync = {
+    async get() { return { ...syncStore }; },
+  };
+  globalThis.chrome = { storage: { local, sync } };
+  try {
+    const migrated = await loadSettings(local);
+    assert.equal(migrated.sensitivity, 'strict');
+    assert.deepEqual(migrated.whitelist, ['example.com']);
+    assert.equal(localStore.sensitivity, 'strict');
+    // 移行後に local に値がある場合、sync 側の変更は取り込まない。
+    syncStore.sensitivity = 'loose';
+    assert.equal((await loadSettings(local)).sensitivity, 'strict');
+  } finally {
+    if (previous === undefined) delete globalThis.chrome;
+    else globalThis.chrome = previous;
+  }
+});
