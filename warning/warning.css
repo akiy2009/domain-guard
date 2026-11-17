@@ -136,3 +136,11 @@ h1 { margin-bottom: 5px; font-size: clamp(18px, 2.2vw, 21px); font-weight: 750; 
   .score { margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+@media (min-width: 681px) {
+  .reasons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+  }
+}
