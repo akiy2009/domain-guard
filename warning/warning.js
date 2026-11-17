@@ -11,7 +11,8 @@ function applyStoredAppearance() {
 
 async function initAppearance() {
   try {
-    appearanceSettings = await chrome.storage.sync.get(null);
+    // Settings are scoped to this browser profile.
+    appearanceSettings = await chrome.storage.local.get(null);
   } catch {
     appearanceSettings = null;
   }
