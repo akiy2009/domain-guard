@@ -9,7 +9,7 @@ let currentSettings = null;
 let loading = false;
 
 applyAppearance(DEFAULT_APPEARANCE);
-chrome.storage.sync.get(null)
+chrome.storage.local.get(null)
   .then((stored) => applyAppearance(stored))
   .catch(() => {});
 
